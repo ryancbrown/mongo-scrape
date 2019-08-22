@@ -1,1 +1,21 @@
-Hello world
+<article> 
+    {{#each articles}}
+        <div class="row pt-3">
+            <div class="col-11">
+                <a href="{{url}}" target="_blank">{{title}}</a>
+            </div>
+            <div class="col-1 text-right">
+                {{#if isSaved}}
+                    Saved
+                {{else}}
+                    Save
+                {{/if}}
+            </div>
+        </div>
+        <div class="row pb-3 border-bottom">
+            <div class="col-11">
+                {{summary}}
+            </div>
+        </div>
+    {{/each}}   
+</article>

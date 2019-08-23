@@ -6,6 +6,7 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const db = require("./models");
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/mongoHeadlines";
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -83,4 +84,4 @@ app.get("/article/notes/:id", (req, res) => {
     });
 })
 
-app.listen(3000, () => console.log("Connected and listening on port 3000."));
+app.listen(PORT, () => console.log("Connected and listening on port 3000."));

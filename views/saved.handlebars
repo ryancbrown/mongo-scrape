@@ -1,0 +1,37 @@
+<article> 
+    {{#each articles}}
+        <div class="row pt-3">
+            <div class="col-12">
+                <a href="{{url}}" target="_blank">{{title}}</a>
+            </div>
+        </div>
+        <div class="row pb-3 bottom">
+            <div class="col-12">
+                {{summary}}
+            </div>
+
+            <div class="col-12 pt-2">
+                <a role="button" class="note-button text-primary" data-article-id="{{id}}">Notes ({{this.note.length}})</a>
+            </div>
+            
+            <div class="col-8 py-2 d-none">
+                <div class="row">
+                    <div class="col">
+                        <textarea class="border rounded p-2 note-text"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-primary note" data-article-id="{{id}}">Add note</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+               <ul id="note-{{id}}">
+                   
+               </ul> 
+            </div>
+        
+        </div>
+    {{/each}}   
+</article>

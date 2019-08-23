@@ -6,13 +6,13 @@
             </div>
             <div class="col-1 text-right">
                 {{#if isSaved}}
-                    Saved
+                    <button class="btn btn-light">Saved</button>
                 {{else}}
-                    Save
+                    <button class="btn btn-primary save" data-article="{{_id}}">Save</button>
                 {{/if}}
             </div>
         </div>
-        <div class="row pb-3 border-bottom">
+        <div class="row pb-3 bottom">
             <div class="col-11">
                 {{summary}}
             </div>

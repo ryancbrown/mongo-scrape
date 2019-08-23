@@ -1,3 +1,13 @@
+// Page styling
+if (location.pathname === "/saved") { // Bold "Saved Articles" if page is open
+    $(".saved").addClass("font-weight-bold")
+} else { 
+    $(".home").addClass("font-weight-bold") // Bold "Home" if page is open
+}
+
+$(".bottom").last().toggleClass("bottom") // Remove bottom border on final article
+
+
 // Scrape newest articles
 $("#scrapePage").on("click", (e) => {
     $.get("/scrape", (element) => { 
@@ -23,3 +33,39 @@ $("#scrapePage").on("click", (e) => {
         }
     });
 });
+
+
+$(document).on("click", ".save", function(e) {
+    e.preventDefault()
+    let articleId = $(this).data("article")
+    $.post("/article/save", {id: articleId})
+    window.location.href = "/"
+});
+
+$(document).on("click", ".note", function(e) {
+    e.preventDefault()
+    const note = {
+        id: $(this).data("article-id"),
+        note: $(this).parent().parent().parent().find(".note-text").val()
+    }
+
+    $.post("/note/save", note, function(e) {
+        console.log(e)
+    });   
+});
+
+$(document).on("click", ".note-button", function(e) { 
+    e.preventDefault()
+    let id = $(this).data("article-id"); 
+
+    $.get(`/article/notes/${id}`, function(e) { 
+        $(`#note-${id}`).html("")
+
+        $.each(e, function(i, element){ 
+            $(`#note-${id}`).append(`<li>${e[i].body}</li>`)
+        });
+    }); 
+    // Start at the anchor, move up to the parent div
+    // Find the next div and toggle on/off notes
+    $(this).parent().next().toggleClass("d-none")
+})

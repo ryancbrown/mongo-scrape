@@ -1,21 +1,25 @@
 <article> 
-    {{#each articles}}
-        <div class="row pt-3">
-            <div class="col-11">
-                <a href="{{url}}" target="_blank">{{title}}</a>
+    {{#if articles}}
+        {{#each articles}}
+            <div class="row pt-3">
+                <div class="col-11">
+                    <a href="{{url}}" target="_blank">{{title}}</a>
+                </div>
+                <div class="col-1 text-right">
+                    {{#if isSaved}}
+                        <button class="btn btn-light">Saved</button>
+                    {{else}}
+                        <button class="btn btn-primary save" data-article="{{_id}}">Save</button>
+                    {{/if}}
+                </div>
             </div>
-            <div class="col-1 text-right">
-                {{#if isSaved}}
-                    <button class="btn btn-light">Saved</button>
-                {{else}}
-                    <button class="btn btn-primary save" data-article="{{_id}}">Save</button>
-                {{/if}}
+            <div class="row pb-3 bottom">
+                <div class="col-11">
+                    {{summary}}
+                </div>
             </div>
-        </div>
-        <div class="row pb-3 bottom">
-            <div class="col-11">
-                {{summary}}
-            </div>
-        </div>
-    {{/each}}   
+        {{/each}}   
+        {{else}}
+            Click "Scrape" to grab the latest in world news. 
+        {{/if}}
 </article>

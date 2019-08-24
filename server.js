@@ -57,9 +57,13 @@ app.get("/scrape", (req, res) => {
 }); 
 
 app.post("/article/save", (req, res) => { 
-    console.log(req.body.id)
     const id = req.body.id
-    db.Article.updateOne({ "_id": id }, { "isSaved": true }).then((element) => {console.log(element)})
+    db.Article.updateOne({ "_id": id }, { "isSaved": true }).then((result) => console.log(result))
+});
+
+app.post("/article/remove", (req, res) => { 
+    const id = req.body.id
+    db.Article.updateOne({ "_id": id }, { "isSaved": false }).then((result) => console.log(result))
 });
 
 app.post("/note/save", (req, res) => { 

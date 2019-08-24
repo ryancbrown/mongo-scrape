@@ -1,3 +1,17 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.wrapper {
+    min-height: 80%;
+    margin-bottom: -120px;
+  }
+
+footer, .push {
+    height: 120px;
+}
+  
 .header-link { 
     line-height: 38px;
 }
@@ -23,6 +37,6 @@ li {
     padding: 0 0 0 10px;
 }
 
-.note-button {
+.note-button, .remove-button {
     cursor: pointer;
 }

@@ -1,36 +1,40 @@
 <article> 
-    {{#each articles}}
-        <div class="row pt-3">
-            <div class="col-12">
-                <a href="{{url}}" target="_blank">{{title}}</a>
+    {{#if articles}}
+        {{#each articles}}
+            <div class="row pt-3">
+                <div class="col-12">
+                    <a href="{{url}}" target="_blank">{{title}}</a>
+                </div>
             </div>
-        </div>
-        <div class="row pb-3 bottom">
-            <div class="col-12">
-                {{summary}}
-            </div>
+            <div class="row pb-3 bottom">
+                <div class="col-12">
+                    {{summary}}
+                </div>
 
-            <div class="col-12 pt-2">
-                <a role="button" class="note-button text-primary" data-article="{{id}}">Notes ({{this.note.length}})</a> | Remove Article
-            </div>
-            
-            <div class="col-8 py-2 d-none">
-                <div class="row">
-                    <div class="col">
-                        <textarea class="border rounded p-2 note-text" data-article-input="{{id}}"></textarea>
+                <div class="col-12 pt-2">
+                    <a role="button" class="note-button text-primary" data-article="{{id}}">Notes ({{this.note.length}})</a>  |  <a role="button" class="remove-button text-danger" data-article-remove="{{id}}">Remove Article</a>
+                </div>
+                
+                <div class="col-8 py-2 d-none">
+                    <div class="row">
+                        <div class="col">
+                            <textarea class="border rounded p-2 note-text" data-article-input="{{id}}"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-primary note" data-article-id="{{id}}">Add note</button>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <button class="btn btn-primary note" data-article-id="{{id}}">Add note</button>
-                    </div>
+                <div class="col-4 d-none">
+                <ul class="px-0" id="note-{{id}}">
+                    
+                </ul> 
                 </div>
             </div>
-            <div class="col-4 d-none">
-               <ul class="px-0" id="note-{{id}}">
-                   
-               </ul> 
-            </div>
-        </div>
-    {{/each}}   
+        {{/each}} 
+        {{else}}
+            No saved articles.
+        {{/if}}  
 </article>

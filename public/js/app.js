@@ -7,7 +7,6 @@ if (location.pathname === "/saved") { // Bold "Saved Articles" if page is open
 
 $(".bottom").last().toggleClass("bottom") // Remove bottom border on final article
 
-
 // Scrape newest articles from NPR world news
 $("#scrapePage").on("click", (e) => {
     $.get("/scrape", (element) => { 
@@ -18,14 +17,14 @@ $("#scrapePage").on("click", (e) => {
             // Show the user a countdown and redirect to home page 
             // Home page returns 20 most recent articles stored
             let seconds = 2           
-            $("article").html("<div class='px-0' id='success'>Scrape successful.</div><div class='px-0' id='counter'>Redirecting in 3 seconds.")
+            $("article").html("<div class='px-0' id='success'>Scrape successful.</div><div class='px-0' id='counter'>Loading articles in 3 seconds.")
             setInterval(() => { 
-                $("#counter").html(`Redirecting in ${seconds} seconds.`)
+                $("#counter").html(`Loading articles in ${seconds} seconds.`)
                     seconds-- 
                     if (seconds === 1) { 
                         setTimeout(() => {
                             window.location.href = "/" 
-                        },1500)
+                        },1500) // Slow the counter by half a second
                     }
                 },1000)
         } else { 
@@ -81,4 +80,11 @@ $(document).on("click", ".note-button", function(e) {
     // Find the next div and toggle on/off notes
     $(this).parent().next().toggleClass("d-none")
     $(this).parent().next().next().toggleClass("d-none")
-})
+});
+
+$(document).on("click", ".remove-button", function(e){
+    e.preventDefault()
+    let articleId = $(this).data("article-remove")
+
+    $.post("/article/remove", { id: articleId }).then(window.location.href = "/saved")
+});

@@ -22,14 +22,14 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 app.get("/", (req, res) => {
     // Grab the 20 most recent stored articles
-    db.Article.find({isSaved: false}).limit(20).sort({_id: 1}).then((outcome) => { 
+    db.Article.find({ isSaved: false }).limit(20).sort({ _id: 1 }).then((outcome) => { 
         res.render("home", {articles: outcome});
     });
 });
 
 app.get("/saved", (req, res) => {
     // Return all saved articles
-    db.Article.find({isSaved: true}).then((outcome) => { 
+    db.Article.find({ isSaved: true }).then((outcome) => { 
         res.render("saved", {articles: outcome});
     });
 });
@@ -57,16 +57,17 @@ app.get("/scrape", (req, res) => {
 }); 
 
 app.post("/article/save", (req, res) => { 
+    console.log(req.body.id)
     const id = req.body.id
-    db.Article.updateOne({ "_id": id },
-    { "isSaved": true }).then((element) => {console.log(element)})
+    db.Article.updateOne({ "_id": id }, { "isSaved": true }).then((element) => {console.log(element)})
 });
 
 app.post("/note/save", (req, res) => { 
     // Construct note obj
     const note = new db.Note({
         article: req.body.id, 
-        body: req.body.note
+        body: req.body.note, 
+        date: req.body.date
     });
 
     note.save(function(err, result){
@@ -79,9 +80,9 @@ app.post("/note/save", (req, res) => {
 app.get("/article/notes/:id", (req, res) => { 
     const id = req.params.id;
 
-    db.Note.find({article: id}).then((notesList) => { 
+    db.Note.find({ article: id }).then((notesList) => { 
         res.send(notesList)
     });
 })
 
-app.listen(PORT, () => console.log("Connected and listening on port 3000."));
+app.listen(PORT, () => console.log(`Connected and listening on port ${PORT}.`));

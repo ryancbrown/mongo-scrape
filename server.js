@@ -20,6 +20,7 @@ app.set("view engine", "handlebars");
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
+// Load all unsaved articles
 app.get("/", (req, res) => {
     // Grab the 20 most recent stored articles
     db.Article.find({ isSaved: false }).limit(20).sort({ _id: 1 }).then((outcome) => { 
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
     });
 });
 
+// Load saved articles
 app.get("/saved", (req, res) => {
     // Return all saved articles
     db.Article.find({ isSaved: true }).then((outcome) => { 
@@ -50,22 +52,36 @@ app.get("/scrape", (req, res) => {
             scrapeObj.isSaved = false;
 
             // Send scraped data to Mongodb
-            db.Article.create(scrapeObj).then((mongoSave) => console.log(mongoSave)).catch(err => res.send(err))
+            // Use update + upsert: true to prevent storing duplicate articles
+            db.Article.update(scrapeObj, { upsert: true }).then((mongoSave) => console.log(mongoSave)).catch(err => res.send(err))
         });
         // Send confirmation that scrape is complete
     }).then(res.send("Scrape successful."));
-}); 
+});
 
+// Save article
 app.post("/article/save", (req, res) => { 
     const id = req.body.id
     db.Article.updateOne({ "_id": id }, { "isSaved": true }).then((result) => res.send(result))
 });
 
+// Unsave article
 app.post("/article/remove", (req, res) => { 
     const id = req.body.id
     db.Article.updateOne({ "_id": id }, { "isSaved": false }).then((result) => console.log(result))
 });
 
+
+// Get notes
+app.get("/article/notes/:id", (req, res) => { 
+    const id = req.params.id;
+
+    db.Note.find({ article: id }).then((notesList) => { 
+        res.send(notesList)
+    });
+});
+
+// Save note
 app.post("/note/save", (req, res) => { 
     // Construct note obj
     const note = new db.Note({
@@ -81,17 +97,10 @@ app.post("/note/save", (req, res) => {
     })
 });
 
+// Delete note
 app.post("/note/delete", (req, res) => { 
     db.Note.findOneAndDelete({ "_id": req.body.id }).then((e) => console.log(e))
     db.Article.findOneAndUpdate({ "_id": req.body.article }, { $pullAll: { "note": [ req.body.id ] } }).then((result) => res.send(result))
-})
-
-app.get("/article/notes/:id", (req, res) => { 
-    const id = req.params.id;
-
-    db.Note.find({ article: id }).then((notesList) => { 
-        res.send(notesList)
-    });
-})
+});
 
 app.listen(PORT, () => console.log(`Connected and listening on port ${PORT}.`));

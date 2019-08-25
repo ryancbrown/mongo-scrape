@@ -4,8 +4,8 @@ html, body {
 }
 
 .wrapper {
-    min-height: 80%;
     margin-bottom: -120px;
+    min-height: 80%;
   }
 
 footer, .push {
@@ -51,4 +51,5 @@ li {
 
 .delete-note {
     border-left: 5px solid #dc3545;
+    text-decoration: line-through
 }

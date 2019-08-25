@@ -58,7 +58,7 @@ $(document).on("click", ".note", function(e) {
     // Post to server for it to be saved
     $.post("/note/save", note, (e) => {
         count = e.note.length
-        $(`#note-${id}`).append(`<li class="bg-light pr-3" data-note=${e.note[count-1]}><b>${moment().format("YYYY-MM-DD")}</b><br> ${noteText.val()}<div class="delete bg-danger d-none rounded-right px-3"><b>x</b></div></li></li>`)
+        $(`#note-${id}`).append(`<li class="bg-light pr-3 rounded" data-note=${e.note[count-1]}><b>${moment().format("YYYY-MM-DD")}</b><br> ${noteText.val()}<div class="delete bg-danger d-none rounded-right px-3"><b>Y</b></div></li>`)
         $(document).find(`[data-article='${id}']`).text(`Notes (${count})`)
         noteText.val("")
     });   
@@ -69,12 +69,13 @@ $(document).on("click", ".note-button", function(e) {
     e.preventDefault()
     let id = $(this).data("article"); 
 
+    // Get the notes for the article selected
     $.get(`/article/notes/${id}`, (e) => { 
         $(`#note-${id}`).html("")
 
         $.each(e, (i, element) => { 
-            console.log(e[i].date)
-            $(`#note-${id}`).append(`<li class="bg-light pr-3 rounded-left" data-note=${e[i]._id}><b>${moment(e[i].date).format("YYYY-MM-DD")}</b><br> ${e[i].body}<div class="delete bg-danger d-none rounded-right px-3"><b>x</b></div></li>`)
+            // Append notes
+            $(`#note-${id}`).append(`<li class="bg-light pr-3 rounded-left" data-note=${e[i]._id}><b>${moment(e[i].date).format("YYYY-MM-DD")}</b><br> ${e[i].body}<div class="delete bg-danger d-none rounded-right px-3"><b>Y</b></div></li>`)
         });
     }); 
     // Start at the anchor, move up to the parent div
@@ -85,8 +86,10 @@ $(document).on("click", ".note-button", function(e) {
 
 // Toggle red background and reveal delete button on note select
 $(document).on("click", "li", function() {
+    
+
     $(this).toggleClass("bg-danger bg-light text-white")
-    $(this).children().toggleClass("d-none")
+    $(this).children().not("span").toggleClass("d-none")
     $(this).toggleClass("delete-note")
 });
 
@@ -110,6 +113,6 @@ $(document).on("click", ".delete", function() {
 $(document).on("click", ".remove-button", function(e){
     e.preventDefault()
     let articleId = $(this).data("article-remove")
-
+    // Delete article
     $.post("/article/remove", { id: articleId }).then(window.location.href = "/saved")
 });

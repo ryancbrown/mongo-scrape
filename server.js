@@ -58,7 +58,7 @@ app.get("/scrape", (req, res) => {
 
 app.post("/article/save", (req, res) => { 
     const id = req.body.id
-    db.Article.updateOne({ "_id": id }, { "isSaved": true }).then((result) => console.log(result))
+    db.Article.updateOne({ "_id": id }, { "isSaved": true }).then((result) => res.send(result))
 });
 
 app.post("/article/remove", (req, res) => { 
@@ -80,6 +80,11 @@ app.post("/note/save", (req, res) => {
         })
     })
 });
+
+app.post("/note/delete", (req, res) => { 
+    db.Note.findOneAndDelete({ "_id": req.body.id }).then((e) => console.log(e))
+    db.Article.findOneAndUpdate({ "_id": req.body.article }, { $pullAll: { "note": [ req.body.id ] } }).then((result) => res.send(result))
+})
 
 app.get("/article/notes/:id", (req, res) => { 
     const id = req.params.id;

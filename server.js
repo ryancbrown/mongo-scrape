@@ -23,7 +23,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 // Load all unsaved articles
 app.get("/", (req, res) => {
     // Grab the 20 most recent stored articles
-    db.Article.find({ isSaved: false }).limit(20).sort({ _id: 1 }).then((outcome) => { 
+    db.Article.find({ isSaved: false }).limit(20).sort({ date: -1 }).then((outcome) => { 
         res.render("home", {articles: outcome});
     });
 });
@@ -53,7 +53,7 @@ app.get("/scrape", (req, res) => {
 
             // Send scraped data to Mongodb
             // Use update + upsert: true to prevent storing duplicate articles
-            db.Article.update(scrapeObj, { upsert: true }).then((mongoSave) => console.log(mongoSave)).catch(err => res.send(err))
+            db.Article.create(scrapeObj).then((mongoSave) => console.log(mongoSave)).catch(err => res.send(err))
         });
         // Send confirmation that scrape is complete
     }).then(res.send("Scrape successful."));
